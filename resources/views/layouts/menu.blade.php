@@ -302,7 +302,7 @@ $role_has_permission = App\Models\Permission::where('role_id', $user->role_id)->
             </ul>
         </li>
         @endif
-        @if(in_array('banners', $role_has_permission) || in_array('cms', $role_has_permission) || in_array('on-board', $role_has_permission) || in_array('email-template', $role_has_permission))
+        @if(in_array('banners', $role_has_permission) || in_array('cms', $role_has_permission) || in_array('on-board', $role_has_permission) || in_array('email-template', $role_has_permission) || in_array('seo', $role_has_permission))
         <li class="nav-subtitle"><span class="nav-subtitle-span">{{trans('lang.design_and_content_management')}}</span></li>
         @endif
         @if(in_array('banners', $role_has_permission))
@@ -339,6 +339,13 @@ $role_has_permission = App\Models\Permission::where('role_id', $user->role_id)->
         <li><a class="waves-effect waves-dark" href="{!! url('email-templates') !!}" aria-expanded="false">
                 <i class="mdi mdi-email"></i>
                 <span class="hide-menu">{{trans('lang.email_templates')}}</span>
+            </a>
+        </li>
+        @endif
+        @if(in_array('seo', $role_has_permission))
+        <li><a class="waves-effect waves-dark" href="{!! route('seo.index') !!}" aria-expanded="false">
+                <i class="mdi mdi-search-web"></i>
+                <span class="hide-menu">SEO Management</span>
             </a>
         </li>
         @endif

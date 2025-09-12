@@ -16,8 +16,18 @@ use App\Http\Controllers\CuisineController;
 */
 
 Auth::routes();
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
+// Admin dashboard routes (require authentication)
+Route::middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+});
+
+// Migration routes
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/migration', [App\Http\Controllers\Admin\MigrationController::class, 'index'])->name('admin.migration');
+    Route::post('/migration/fix-media-paths', [App\Http\Controllers\Admin\MigrationController::class, 'fixMediaPaths'])->name('admin.migration.fix-media-paths');
+});
 
 Route::get('lang/change', [App\Http\Controllers\LangController::class, 'change'])->name('changeLang');
 
@@ -402,6 +412,20 @@ Route::prefix('settings')->group(function () {
     });
     Route::middleware(['permission:global-setting,settings.app.globals'])->group(function () {
         Route::get('app/globals', [App\Http\Controllers\SettingsController::class, 'globals'])->name('settings.app.globals');
+    });
+    
+    // SEO Management Routes
+    Route::middleware(['permission:seo,seo'])->group(function () {
+        Route::get('/seo', [App\Http\Controllers\SeoController::class, 'index'])->name('seo.index');
+        Route::get('/seo/create', [App\Http\Controllers\SeoController::class, 'create'])->name('seo.create');
+        Route::post('/seo', [App\Http\Controllers\SeoController::class, 'store'])->name('seo.store');
+        Route::get('/seo/{seo}/edit', [App\Http\Controllers\SeoController::class, 'edit'])->name('seo.edit');
+        Route::put('/seo/{seo}', [App\Http\Controllers\SeoController::class, 'update'])->name('seo.update');
+        Route::delete('/seo/{seo}', [App\Http\Controllers\SeoController::class, 'destroy'])->name('seo.destroy');
+        Route::get('/seo/generate-sitemap', [App\Http\Controllers\SeoController::class, 'generateSitemap'])->name('seo.generate-sitemap');
+        Route::get('/seo/preview-sitemap', [App\Http\Controllers\SeoController::class, 'previewSitemap'])->name('seo.preview-sitemap');
+        Route::get('/seo/sitemap-stats', [App\Http\Controllers\SeoController::class, 'sitemapStats'])->name('seo.sitemap-stats');
+        Route::post('/seo/settings/update', [App\Http\Controllers\SeoController::class, 'updateSettings'])->name('seo.settings.update');
     });
     Route::middleware(['permission:admin-commission,settings.app.adminCommission'])->group(function () {
         Route::get('app/adminCommission', [App\Http\Controllers\SettingsController::class, 'adminCommission'])->name('settings.app.adminCommission');
