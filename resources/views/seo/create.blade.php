@@ -3,27 +3,53 @@
 @section('title', 'Create SEO Page')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-plus"></i> Create New SEO Page
-                    </h3>
-                    <div class="card-tools">
-                        <a href="{{ route('seo.index') }}" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-arrow-left"></i> Back to List
-                        </a>
+<div class="page-wrapper">
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">Create SEO Page</h3>
+        </div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('seo.index') }}">SEO Management</a></li>
+                <li class="breadcrumb-item active">Create SEO Page</li>
+            </ol>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border">
+                    <div class="card-header d-flex justify-content-between align-items-center border-0">
+                        <div class="card-header-title">
+                            <h3 class="text-dark-2 mb-2 h4">Create New SEO Page</h3>
+                            <p class="mb-0 text-dark-2">Add SEO settings for a new page</p>
+                        </div>
+                        <div class="card-header-right d-flex align-items-center">
+                            <div class="card-header-btn mr-3">
+                                <a href="{{ route('seo.index') }}" class="btn btn-secondary rounded-full">
+                                    <i class="mdi mdi-arrow-left mr-2"></i>Back to List
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 <form action="{{ route('seo.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="page_key">Page Key <span class="text-danger">*</span></label>
+                                    <label for="page_key" class="control-label">Page Key <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('page_key') is-invalid @enderror" 
                                            id="page_key" name="page_key" value="{{ old('page_key') }}" 
                                            placeholder="e.g., home, product, restaurant" required>
@@ -37,7 +63,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="title">Page Title</label>
+                                    <label for="title" class="control-label">Page Title</label>
                                     <input type="text" class="form-control @error('title') is-invalid @enderror" 
                                            id="title" name="title" value="{{ old('title') }}" 
                                            placeholder="Page title for search engines" maxlength="255">
@@ -52,7 +78,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="description">Meta Description</label>
+                            <label for="description" class="control-label">Meta Description</label>
                             <textarea class="form-control @error('description') is-invalid @enderror" 
                                       id="description" name="description" rows="3" 
                                       placeholder="Description for search engines" maxlength="500">{{ old('description') }}</textarea>
@@ -65,7 +91,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="keywords">Keywords</label>
+                            <label for="keywords" class="control-label">Keywords</label>
                             <input type="text" class="form-control @error('keywords') is-invalid @enderror" 
                                    id="keywords" name="keywords" value="{{ old('keywords') }}" 
                                    placeholder="food delivery, grocery, online ordering" maxlength="500">
@@ -78,12 +104,12 @@
                         </div>
 
                         <hr>
-                        <h5>Open Graph (Social Media) Settings</h5>
+                        <h5 class="text-dark-2 mb-3">Open Graph (Social Media) Settings</h5>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="og_title">OG Title</label>
+                                    <label for="og_title" class="control-label">OG Title</label>
                                     <input type="text" class="form-control @error('og_title') is-invalid @enderror" 
                                            id="og_title" name="og_title" value="{{ old('og_title') }}" 
                                            placeholder="Title for social media sharing" maxlength="255">
@@ -94,7 +120,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="og_image">OG Image</label>
+                                    <label for="og_image" class="control-label">OG Image</label>
                                     <input type="file" class="form-control-file @error('og_image') is-invalid @enderror" 
                                            id="og_image" name="og_image" accept="image/*">
                                     @error('og_image')
@@ -108,7 +134,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="og_description">OG Description</label>
+                            <label for="og_description" class="control-label">OG Description</label>
                             <textarea class="form-control @error('og_description') is-invalid @enderror" 
                                       id="og_description" name="og_description" rows="3" 
                                       placeholder="Description for social media sharing" maxlength="500">{{ old('og_description') }}</textarea>
@@ -120,8 +146,8 @@
                         <!-- SEO Preview -->
                         <div class="row mt-4">
                             <div class="col-md-12">
-                                <h5>SEO Preview</h5>
-                                <div class="card bg-light">
+                                <h5 class="text-dark-2 mb-3">SEO Preview</h5>
+                                <div class="card bg-light border">
                                     <div class="card-body">
                                         <div class="seo-preview">
                                             <div class="search-result">
@@ -136,11 +162,11 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Create SEO Page
+                        <button type="submit" class="btn btn-primary rounded-full">
+                            <i class="mdi mdi-content-save mr-2"></i>Create SEO Page
                         </button>
-                        <a href="{{ route('seo.index') }}" class="btn btn-secondary">
-                            Cancel
+                        <a href="{{ route('seo.index') }}" class="btn btn-secondary rounded-full">
+                            <i class="mdi mdi-close mr-2"></i>Cancel
                         </a>
                     </div>
                 </form>
