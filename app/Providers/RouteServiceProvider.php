@@ -43,9 +43,15 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
+            // Admin routes only (authentication handled within route files)
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+
+            // Customer routes disabled - remove if not needed for public website
+            // Route::middleware('web')
+            //     ->namespace($this->namespace)
+            //     ->group(base_path('routes/customer.php'));
         });
     }
 

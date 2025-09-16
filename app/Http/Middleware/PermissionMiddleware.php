@@ -36,10 +36,19 @@ class PermissionMiddleware
             
             if ($routes == null) {
                 return $next($request);
-            } else if (in_array($routes, $permission_has_routes)) {
-                return $next($request);
             } else {
-                abort(403, 'unauthorized access');
+                // Handle comma-separated routes
+                $allowedRoutes = [];
+                foreach ($permission_has_routes as $routeString) {
+                    $allowedRoutes = array_merge($allowedRoutes, explode(',', $routeString));
+                }
+                $allowedRoutes = array_map('trim', $allowedRoutes);
+                
+                if (in_array($routes, $allowedRoutes)) {
+                    return $next($request);
+                } else {
+                    abort(403, 'unauthorized access');
+                }
             }
 
         } else {

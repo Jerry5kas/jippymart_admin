@@ -600,3 +600,5 @@ Sitemap: https://jippymart.in/sitemap.xml
 2. Implement and test `php artisan generate:sitemap` locally until `public/sitemap.xml` looks correct.
 3. Upload service account JSON to server (if Firestore used), add env entries, and test Firestore queries from Laravel (Tinker helps).
 4. Add `robots.txt`, verify sitemap accessible, then submit to GSC.
+
+

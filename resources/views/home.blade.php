@@ -13,7 +13,7 @@
                 </div>
                 <div class="row"> 
                     <div class="col-md-3">
-                        <div class="card card-box-with-icon bg--8" onclick="location.href='{!! route('payments') !!}'">
+                        <div class="card card-box-with-icon bg--8" onclick="location.href='{!! url('payments') !!}'">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div class="card-box-with-content">
                                     <h4 class="text-dark-2 mb-1 h4 earnings_count" id="earnings_count"></h4>
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card card-box-with-icon bg--1" onclick="location.href='{!! route('restaurants') !!}'">
+                        <div class="card card-box-with-icon bg--1" onclick="location.href='{!! url('restaurants') !!}'">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div class="card-box-with-content">
                                     <h4 class="text-dark-2 mb-1 h4 vendor_count" id="vendor_count"></h4>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card card-box-with-icon bg--5" onclick="location.href='{!! route('orders') !!}'">
+                        <div class="card card-box-with-icon bg--5" onclick="location.href='{!! url('orders') !!}'">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div class="card-box-with-content">
                                     <h4 class="text-dark-2 mb-1 h4" id="order_count"></h4>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card card-box-with-icon bg--24" onclick="location.href='{!! route('foods') !!}'">
+                        <div class="card card-box-with-icon bg--24" onclick="location.href='{!! url('foods') !!}'">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div class="card-box-with-content">
                                     <h4 class="text-dark-2 mb-1 h4" id="product_count"></h4>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card card-box-with-icon bg--14" onclick="location.href='{!! route('payments') !!}'">
+                        <div class="card card-box-with-icon bg--14" onclick="location.href='{!! url('payments') !!}'">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div class="card-box-with-content">
                                     <h4 class="text-dark-2 mb-1 h4" id="admincommission_count"></h4>
@@ -68,7 +68,7 @@
                         </div>
                     </div>    
                     <div class="col-md-3">
-                        <div class="card card-box-with-icon bg--6" onclick="location.href='{!! route('users') !!}'">
+                        <div class="card card-box-with-icon bg--6" onclick="location.href='{!! url('users') !!}'">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div class="card-box-with-content">
                                     <h4 class="text-dark-2 mb-1 h4" id="users_count"></h4>
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card card-box-with-icon bg--15" onclick="location.href='{!! route('drivers') !!}'">
+                        <div class="card card-box-with-icon bg--15" onclick="location.href='{!! url('drivers') !!}'">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div class="card-box-with-content">
                                     <h4 class="text-dark-2 mb-1 h4" id="driver_count"></h4>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="row business-analytics_list">
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status pending" href="{{ route('orders','status=order-placed') }}">
+                        <a class="order-status pending" href="{{ url('orders?status=order-placed') }}">
                             <div class="data">
                                 <i class="mdi mdi-lan-pending"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_placed')}}</h6>
@@ -100,7 +100,7 @@
                             <span class="count" id="placed_count"></span> </a>
                     </div>
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status confirmed"  href="{!! route('orders','status=order-confirmed') !!}">
+                        <a class="order-status confirmed"  href="{!! url('orders?status=order-confirmed') !!}">
                             <div class="data">
                                 <i class="mdi mdi-check-circle"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_confirmed')}}</h6>
@@ -108,7 +108,7 @@
                             <span class="count" id="confirmed_count"></span> </a>
                     </div>
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status packaging"  href="{!! route('orders','status=order-shipped') !!}">
+                        <a class="order-status packaging"  href="{!! url('orders?status=order-shipped') !!}">
                             <div class="data">
                                 <i class="mdi mdi-clipboard-outline"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_shipped')}}</h6>
@@ -116,7 +116,7 @@
                             <span class="count" id="shipped_count"></span> </a>
                     </div>
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status delivered" href="{!! route('orders','status=order-completed') !!}">
+                        <a class="order-status delivered" href="{!! url('orders?status=order-completed') !!}">
                             <div class="data">
                                 <i class="mdi mdi-check-circle-outline"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_completed')}}</h6>
@@ -125,7 +125,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status canceled" href="{!! route('orders','status=order-canceled') !!}">
+                        <a class="order-status canceled" href="{!! url('orders?status=order-canceled') !!}">
                             <div class="data">
                                 <i class="mdi mdi-window-close"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_canceled')}}</h6>
@@ -134,7 +134,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status failed" href="{!! route('orders','status=order-failed') !!}">
+                        <a class="order-status failed" href="{!! url('orders?status=order-failed') !!}">
                             <div class="data">
                                 <i class="mdi mdi-alert-circle-outline"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_failed')}}</h6>
@@ -143,7 +143,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-lg-3">
-                        <a class="order-status failed" href="{!! route('orders','status=order-pending') !!}">
+                        <a class="order-status failed" href="{!! url('orders?status=order-pending') !!}">
                             <div class="data">
                                 <i class="mdi mdi-car-connected"></i>
                                 <h6 class="status">{{trans('lang.dashboard_order_pending')}}</h6>
@@ -207,7 +207,7 @@
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.restaurant_plural')}}</h3>
                         <div class="card-tools">
-                            <a href="{{route('restaurants')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i>
+                            <a href="{{url('restaurants')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i>
                             </a>
                         </div>
                     </div>
@@ -234,7 +234,7 @@
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.top_drivers')}}</h3>
                         <div class="card-tools">
-                            <a href="{{route('drivers')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
+                            <a href="{{url('drivers')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -263,7 +263,7 @@
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.recent_orders')}}</h3>
                         <div class="card-tools">
-                            <a href="{{route('orders')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
+                            <a href="{{url('orders')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -289,7 +289,7 @@
                     <div class="card-header no-border d-flex justify-content-between">
                         <h3 class="card-title">{{trans('lang.recent_payouts')}}</h3>
                         <div class="card-tools">
-                            <a href="{{route('payoutRequests.restaurants')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
+                            <a href="{{url('payoutRequests/restaurants')}}" class="btn btn-tool btn-sm"><i class="fa fa-bars"></i> </a>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -698,7 +698,7 @@
                 let profilePic = driver.profilePictureURL || placeholderImage;
                 let name = (driver.firstName || '') + ' ' + (driver.lastName || '');
                 let completed = driverOrderCount[driverID] || 0;
-                let driverEditUrl = `{{route('drivers.edit',':id')}}`.replace(':id', driverID);
+                let driverEditUrl = `{{url('drivers/edit')}}/:id`.replace(':id', driverID);
                 html += `<tr>`;
                 html += `<td class="text-center"><img class="img-circle img-size-32 mr-2 redirecttopage" data-url="${driverEditUrl}" style="width:60px;height:60px;cursor:pointer;" src="${profilePic}" alt="image"></td>`;
                 html += `<td class="redirecttopage" data-url="${driverEditUrl}" style="cursor:pointer;">${name}</td>`;
@@ -729,7 +729,7 @@
             let val = listval.data();
             val.id = listval.id;
             let totalAmount = '';
-            let orderEditUrl = `{{route('orders.edit',':id')}}`.replace(':id', val.id);
+            let orderEditUrl = `{{url('orders/edit')}}/:id`.replace(':id', val.id);
             try {
                 const billingDoc = await db.collection('order_Billing').doc(val.id).get();
                 if (billingDoc.exists && billingDoc.data().ToPay !== undefined) {
@@ -776,7 +776,7 @@
             } else {
                 price_val = currentCurrency + "" + parseFloat(price).toFixed(decimal_degits);
             }
-            var vendorViewUrl = `{{route('restaurants.view',':id')}}`.replace(':id', val.vendorID);
+            var vendorViewUrl = `{{url('restaurants/view')}}/:id`.replace(':id', val.vendorID);
             html = html + `<tr>`;
             html = html + `<td class="redirecttopage restname_${val.vendorID}" data-url="${vendorViewUrl}" style="cursor:pointer"></td>`;
             html = html + `<td class="redirecttopage" data-url="${vendorViewUrl}" style="cursor:pointer">(` + price_val + ")</td>";
