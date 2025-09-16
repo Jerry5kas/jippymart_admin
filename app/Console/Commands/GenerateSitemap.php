@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\SeoPage;
 use App\Models\SeoSetting;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 
 class GenerateSitemap extends Command
 {
@@ -32,14 +34,30 @@ class GenerateSitemap extends Command
         $this->info('🚀 Starting sitemap generation...');
         
         try {
-            $sitemapContent = $this->generateSitemapXml();
+            $sitemap = Sitemap::create();
             
-            // Write sitemap to public directory
-            file_put_contents(public_path('sitemap.xml'), $sitemapContent);
+            // Add static pages
+            $this->addStaticPagesToSitemap($sitemap);
+            
+            // Add dynamic pages from database
+            $this->addDynamicPagesToSitemap($sitemap);
+            
+            // Add Firestore content (if Firebase is configured)
+            $this->addFirestoreContentToSitemap($sitemap);
+            
+            // Write sitemap to admin public directory
+            $adminSitemapPath = public_path('sitemap.xml');
+            $sitemap->writeToFile($adminSitemapPath);
+            
+            // Also copy to customer site root directory
+            $customerSitemapPath = dirname(public_path()) . '/../sitemap.xml';
+            copy($adminSitemapPath, $customerSitemapPath);
             
             $this->info('✅ Sitemap generated successfully!');
-            $this->info('📍 Location: ' . public_path('sitemap.xml'));
-            $this->info('🌐 URL: ' . url('sitemap.xml'));
+            $this->info('📍 Admin Location: ' . $adminSitemapPath);
+            $this->info('📍 Customer Location: ' . $customerSitemapPath);
+            $this->info('🌐 Admin URL: https://admin.jippymart.in/sitemap.xml');
+            $this->info('🌐 Customer URL: https://jippymart.in/sitemap.xml');
             
             return 0;
             
@@ -50,70 +68,43 @@ class GenerateSitemap extends Command
     }
     
     /**
-     * Generate sitemap XML content
+     * Add static pages to sitemap
      */
-    private function generateSitemapXml()
-    {
-        $baseUrl = url('/');
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-        
-        // Add static pages
-        $this->addStaticPagesToXml($xml, $baseUrl);
-        
-        // Add dynamic pages from database
-        $this->addDynamicPagesToXml($xml, $baseUrl);
-        
-        // Add Firestore content (if Firebase is configured)
-        $this->addFirestoreContentToXml($xml, $baseUrl);
-        
-        $xml .= '</urlset>';
-        
-        return $xml;
-    }
-    
-    /**
-     * Add static pages to XML
-     */
-    private function addStaticPagesToXml(&$xml, $baseUrl)
+    private function addStaticPagesToSitemap(Sitemap $sitemap)
     {
         $this->info('📄 Adding static pages...');
         
+        $baseUrl = 'https://jippymart.in';
+        
         $staticPages = [
             '/' => ['priority' => 1.0, 'changefreq' => 'daily'],
-            '/restaurants' => ['priority' => 0.9, 'changefreq' => 'daily'],
+            '/categories' => ['priority' => 0.9, 'changefreq' => 'weekly'],
             '/products' => ['priority' => 0.9, 'changefreq' => 'daily'],
-            '/categories' => ['priority' => 0.8, 'changefreq' => 'weekly'],
-            '/mart' => ['priority' => 0.8, 'changefreq' => 'daily'],
-            '/about' => ['priority' => 0.6, 'changefreq' => 'monthly'],
-            '/contact' => ['priority' => 0.6, 'changefreq' => 'monthly'],
-            '/privacy' => ['priority' => 0.4, 'changefreq' => 'yearly'],
-            '/terms' => ['priority' => 0.4, 'changefreq' => 'yearly'],
-            '/faq' => ['priority' => 0.5, 'changefreq' => 'monthly'],
-            '/offers' => ['priority' => 0.7, 'changefreq' => 'weekly']
+            '/restaurants' => ['priority' => 0.9, 'changefreq' => 'daily'],
+            '/page/about-us' => ['priority' => 0.6, 'changefreq' => 'monthly'],
+            '/contact-us' => ['priority' => 0.6, 'changefreq' => 'monthly'],
         ];
         
         foreach ($staticPages as $url => $config) {
-            $fullUrl = $baseUrl . $url;
-            $lastmod = now()->format('Y-m-d');
-            
-            $xml .= "  <url>\n";
-            $xml .= "    <loc>{$fullUrl}</loc>\n";
-            $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
-            $xml .= "    <changefreq>{$config['changefreq']}</changefreq>\n";
-            $xml .= "    <priority>{$config['priority']}</priority>\n";
-            $xml .= "  </url>\n";
+            $sitemap->add(
+                Url::create($baseUrl . $url)
+                    ->setLastModificationDate(now())
+                    ->setChangeFrequency($config['changefreq'])
+                    ->setPriority($config['priority'])
+            );
         }
         
         $this->info('✅ Added ' . count($staticPages) . ' static pages');
     }
     
     /**
-     * Add dynamic pages from database to XML
+     * Add dynamic pages from database to sitemap
      */
-    private function addDynamicPagesToXml(&$xml, $baseUrl)
+    private function addDynamicPagesToSitemap(Sitemap $sitemap)
     {
         $this->info('🗄️ Adding dynamic pages from database...');
+        
+        $baseUrl = 'https://jippymart.in';
         
         // Add SEO pages that have specific URLs
         $seoPages = SeoPage::whereNotNull('title')->get();
@@ -123,15 +114,12 @@ class GenerateSitemap extends Command
             if ($page->page_key !== 'default' && $page->page_key !== 'home') {
                 $url = $this->getUrlForPageKey($page->page_key);
                 if ($url) {
-                    $fullUrl = $baseUrl . $url;
-                    $lastmod = $page->updated_at->format('Y-m-d');
-                    
-                    $xml .= "  <url>\n";
-                    $xml .= "    <loc>{$fullUrl}</loc>\n";
-                    $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
-                    $xml .= "    <changefreq>weekly</changefreq>\n";
-                    $xml .= "    <priority>0.7</priority>\n";
-                    $xml .= "  </url>\n";
+                    $sitemap->add(
+                        Url::create($baseUrl . $url)
+                            ->setLastModificationDate($page->updated_at)
+                            ->setChangeFrequency('weekly')
+                            ->setPriority(0.7)
+                    );
                     $count++;
                 }
             }
@@ -141,9 +129,9 @@ class GenerateSitemap extends Command
     }
     
     /**
-     * Add Firestore content to XML (restaurants, products, categories)
+     * Add Firestore content to sitemap (restaurants, products, categories)
      */
-    private function addFirestoreContentToXml(&$xml, $baseUrl)
+    private function addFirestoreContentToSitemap(Sitemap $sitemap)
     {
         $this->info('🔥 Adding Firestore content...');
         
@@ -157,6 +145,7 @@ class GenerateSitemap extends Command
             // Initialize Firebase
             $firestore = app('firebase.firestore');
             $count = 0;
+            $baseUrl = 'https://jippymart.in';
             
             // Add restaurants
             $restaurants = $firestore->database()->collection('vendors')
@@ -169,15 +158,13 @@ class GenerateSitemap extends Command
                 if (isset($data['id']) && isset($data['name'])) {
                     $slug = $this->createSlug($data['name']);
                     $url = "/restaurant/{$data['id']}/{$slug}";
-                    $fullUrl = $baseUrl . $url;
-                    $lastmod = now()->format('Y-m-d');
                     
-                    $xml .= "  <url>\n";
-                    $xml .= "    <loc>{$fullUrl}</loc>\n";
-                    $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
-                    $xml .= "    <changefreq>daily</changefreq>\n";
-                    $xml .= "    <priority>0.8</priority>\n";
-                    $xml .= "  </url>\n";
+                    $sitemap->add(
+                        Url::create($baseUrl . $url)
+                            ->setLastModificationDate(now())
+                            ->setChangeFrequency('daily')
+                            ->setPriority(0.8)
+                    );
                     $count++;
                 }
             }
@@ -192,15 +179,13 @@ class GenerateSitemap extends Command
                 $data = $product->data();
                 if (isset($data['id']) && isset($data['name'])) {
                     $url = "/product/{$data['id']}";
-                    $fullUrl = $baseUrl . $url;
-                    $lastmod = now()->format('Y-m-d');
                     
-                    $xml .= "  <url>\n";
-                    $xml .= "    <loc>{$fullUrl}</loc>\n";
-                    $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
-                    $xml .= "    <changefreq>weekly</changefreq>\n";
-                    $xml .= "    <priority>0.7</priority>\n";
-                    $xml .= "  </url>\n";
+                    $sitemap->add(
+                        Url::create($baseUrl . $url)
+                            ->setLastModificationDate(now())
+                            ->setChangeFrequency('weekly')
+                            ->setPriority(0.7)
+                    );
                     $count++;
                 }
             }
@@ -215,15 +200,13 @@ class GenerateSitemap extends Command
                 if (isset($data['id']) && isset($data['name'])) {
                     $slug = $this->createSlug($data['name']);
                     $url = "/category/{$data['id']}/{$slug}";
-                    $fullUrl = $baseUrl . $url;
-                    $lastmod = now()->format('Y-m-d');
                     
-                    $xml .= "  <url>\n";
-                    $xml .= "    <loc>{$fullUrl}</loc>\n";
-                    $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
-                    $xml .= "    <changefreq>weekly</changefreq>\n";
-                    $xml .= "    <priority>0.6</priority>\n";
-                    $xml .= "  </url>\n";
+                    $sitemap->add(
+                        Url::create($baseUrl . $url)
+                            ->setLastModificationDate(now())
+                            ->setChangeFrequency('weekly')
+                            ->setPriority(0.6)
+                    );
                     $count++;
                 }
             }
@@ -241,13 +224,14 @@ class GenerateSitemap extends Command
     private function getUrlForPageKey($pageKey)
     {
         $urlMap = [
+            'home' => '/',
             'restaurants' => '/restaurants',
             'products' => '/products',
             'categories' => '/categories',
             'mart' => '/mart',
             'search' => '/search',
-            'about' => '/about',
-            'contact' => '/contact',
+            'about' => '/page/about-us',
+            'contact' => '/contact-us',
             'privacy' => '/privacy',
             'terms' => '/terms',
             'faq' => '/faq',

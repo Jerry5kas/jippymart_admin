@@ -46,3 +46,6 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 }
+
+//Generic command
+//php artisan db:seed --class=MartBannerPermissionsSeeder

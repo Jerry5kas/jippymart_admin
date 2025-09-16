@@ -248,6 +248,7 @@
                     $('#data-table_processing').show();
                 }
                 ref.orderBy('createdAt', 'desc').get().then(async function (querySnapshot) {
+                    console.log('Firestore query result:', querySnapshot.size, 'documents found');
                     if (querySnapshot.empty) {
                         $('.total_count').text(0); 
                         console.error("No data found in Firestore.");
@@ -267,14 +268,23 @@
                         let childData = doc.data();
                         childData.id = doc.id; // Ensure the document ID is included in the data
                         childData.fullName = childData.firstName + ' ' + childData.lastName || " "
+                        console.log('Processing user:', childData.id, childData.role, childData.firstName, childData.lastName);
                         var date = '';
                         var time = '';
                         childData.email = shortEmail(childData.email);
                         if (childData.hasOwnProperty("createdAt")) {
                             try {
-                                date = childData.createdAt.toDate().toDateString();
-                                time = childData.createdAt.toDate().toLocaleTimeString('en-US');
+                                // Handle both Firestore timestamps and regular dates
+                                if (typeof childData.createdAt.toDate === 'function') {
+                                    date = childData.createdAt.toDate().toDateString();
+                                    time = childData.createdAt.toDate().toLocaleTimeString('en-US');
+                                } else {
+                                    const dateObj = new Date(childData.createdAt);
+                                    date = dateObj.toDateString();
+                                    time = dateObj.toLocaleTimeString('en-US');
+                                }
                             } catch (err) {
+                                console.error('Error processing createdAt:', err);
                             }
                         }
                         var createdAt = date + ' ' + time;
@@ -293,8 +303,30 @@
                         let aValue = a[orderByField] ? a[orderByField].toString().toLowerCase() : '';
                         let bValue = b[orderByField] ? b[orderByField].toString().toLowerCase() : '';
                         if (orderByField === 'createdAt') {
-                            aValue = a[orderByField] ? new Date(a[orderByField].toDate()).getTime() : 0;
-                            bValue = b[orderByField] ? new Date(b[orderByField].toDate()).getTime() : 0;
+                            // Handle both Firestore timestamps and regular dates
+                            try {
+                                if (a[orderByField] && typeof a[orderByField].toDate === 'function') {
+                                    aValue = new Date(a[orderByField].toDate()).getTime();
+                                } else if (a[orderByField]) {
+                                    aValue = new Date(a[orderByField]).getTime();
+                                } else {
+                                    aValue = 0;
+                                }
+                            } catch (e) {
+                                aValue = 0;
+                            }
+                            
+                            try {
+                                if (b[orderByField] && typeof b[orderByField].toDate === 'function') {
+                                    bValue = new Date(b[orderByField].toDate()).getTime();
+                                } else if (b[orderByField]) {
+                                    bValue = new Date(b[orderByField]).getTime();
+                                } else {
+                                    bValue = 0;
+                                }
+                            } catch (e) {
+                                bValue = 0;
+                            }
                         }                        
                         if (orderDirection === 'asc') {
                             return (aValue > bValue) ? 1 : -1;
@@ -317,9 +349,17 @@
                         var time = '';
                         if (childData.hasOwnProperty("createdAt")) {
                             try {
-                                date = childData.createdAt.toDate().toDateString();
-                                time = childData.createdAt.toDate().toLocaleTimeString('en-US');
+                                // Handle both Firestore timestamps and regular dates
+                                if (typeof childData.createdAt.toDate === 'function') {
+                                    date = childData.createdAt.toDate().toDateString();
+                                    time = childData.createdAt.toDate().toLocaleTimeString('en-US');
+                                } else {
+                                    const dateObj = new Date(childData.createdAt);
+                                    date = dateObj.toDateString();
+                                    time = dateObj.toLocaleTimeString('en-US');
+                                }
                             } catch (err) {
+                                console.error('Error processing createdAt in table rendering:', err);
                             }
                         }
                         var vendorImage=childData.profilePictureURL == '' || childData.profilePictureURL == null ? '<img alt="" width="100%" style="width:70px;height:70px;" src="' + placeholderImage + '" alt="image">' : '<img onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" alt="" width="100%" style="width:70px;height:70px;" src="' + childData.profilePictureURL + '" alt="image">'

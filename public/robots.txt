@@ -1,2 +1,19 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap
+Sitemap: https://jippymart.in/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /admin-panel/
+Disallow: /login
+Disallow: /register
+
+# Allow important pages
+Allow: /
+Allow: /categories
+Allow: /products
+Allow: /restaurants
+Allow: /page/about-us
+Allow: /contact-us

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('content')
+@php
+$user = Auth::user();
+$role_has_permission = App\Models\Permission::where('role_id', $user->role_id)->pluck('permission')->toArray();
+@endphp
 <div id="main-wrapper" class="page-wrapper" style="min-height: 207px;">
     <div class="container-fluid">
         <div class="card mb-3 business-analytics">  
@@ -90,6 +94,71 @@
                         </div>
                     </div>
                 </div>
+                
+                @if(in_array('seo', $role_has_permission))
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5 class="mb-3">SEO Management</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-box-with-icon bg--12" onclick="location.href='{!! route('seo.index') !!}'">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div class="card-box-with-content">
+                                    <h4 class="text-dark-2 mb-1 h4">{{ App\Models\SeoPage::count() }}</h4>
+                                    <p class="mb-0 small text-dark-2">SEO Pages</p>
+                                </div>
+                                <span class="box-icon ab"><img src="{{ asset('images/seo_icon.png') }}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-box-with-icon bg--13" onclick="location.href='{!! route('seo.index') !!}'">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div class="card-box-with-content">
+                                    <h4 class="text-dark-2 mb-1 h4">{{ App\Models\SeoPage::whereNull('description')->count() }}</h4>
+                                    <p class="mb-0 small text-dark-2">Pages Need SEO</p>
+                                </div>
+                                <span class="box-icon ab"><img src="{{ asset('images/sitemap_icon.png') }}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-box-with-icon bg--16" onclick="location.href='{!! route('seo.preview-sitemap') !!}'">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div class="card-box-with-content">
+                                    <h4 class="text-dark-2 mb-1 h4">
+                                        @if(file_exists(public_path('sitemap.xml')))
+                                            {{ date('M d', filemtime(public_path('sitemap.xml'))) }}
+                                        @else
+                                            Never
+                                        @endif
+                                    </h4>
+                                    <p class="mb-0 small text-dark-2">Last Sitemap</p>
+                                </div>
+                                <span class="box-icon ab"><img src="{{ asset('images/time_icon.png') }}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-box-with-icon bg--17" onclick="location.href='{!! route('seo.generate-sitemap') !!}'">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div class="card-box-with-content">
+                                    <h4 class="text-dark-2 mb-1 h4">
+                                        @if(file_exists(public_path('sitemap.xml')))
+                                            {{ round(filesize(public_path('sitemap.xml')) / 1024, 1) }}KB
+                                        @else
+                                            N/A
+                                        @endif
+                                    </h4>
+                                    <p class="mb-0 small text-dark-2">Sitemap Size</p>
+                                </div>
+                                <span class="box-icon ab"><img src="{{ asset('images/file_size_icon.png') }}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                
                 <div class="row business-analytics_list">
                     <div class="col-sm-6 col-lg-3">
                         <a class="order-status pending" href="{{ url('orders?status=order-placed') }}">

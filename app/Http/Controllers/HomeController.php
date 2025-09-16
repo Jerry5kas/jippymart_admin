@@ -43,10 +43,6 @@ class HomeController extends Controller
         return view('dashboard');
     }    
     
-    public function users()
-    {
-        return view('users');
-    }
     
     public function storeFirebaseService(Request $request){
 		if(!empty($request->serviceJson) && !Storage::disk('local')->has('firebase/credentials.json')){

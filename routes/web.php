@@ -55,9 +55,7 @@ Route::middleware(['permission:privacy,privacyPolicy'])->group(function () {
 });
 
 Route::middleware(['permission:users,users'])->group(function () {
-    Route::get('/users', [App\Http\Controllers\HomeController::class, 'users'])->name('users');
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users');
-
 });
 Route::middleware(['permission:users,users.edit'])->group(function () {
     Route::get('/users/edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');

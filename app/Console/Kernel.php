@@ -17,6 +17,26 @@ class Kernel extends ConsoleKernel
     {
         // Auto-schedule functionality has been removed to prevent resource issues
         // Restaurant status management is now handled manually through the admin interface
+        
+        // Generate sitemap daily at 2 AM
+        $schedule->command('generate:sitemap')->dailyAt('02:00');
+        
+        // Alternative scheduling options (uncomment if needed):
+        
+        // Every 6 hours
+        // $schedule->command('generate:sitemap')->everySixHours();
+        
+        // Twice daily (2 AM and 2 PM)
+        // $schedule->command('generate:sitemap')->twiceDaily(2, 14);
+        
+        // Every 12 hours
+        // $schedule->command('generate:sitemap')->twiceDaily();
+        
+        // Weekly (Sundays at 2 AM)
+        // $schedule->command('generate:sitemap')->weeklyOn(0, '02:00');
+        
+        // Only when content changes (manual trigger)
+        // Remove the schedule line above and trigger manually via admin panel
     }
 
     /**

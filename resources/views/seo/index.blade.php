@@ -15,27 +15,27 @@
             </ol>
         </div>
     </div>
-    <div class="container-fluid">
+<div class="container-fluid">
         <div class="admin-top-section">
-            <div class="row">
-                <div class="col-12">
+    <div class="row">
+        <div class="col-12">
                     <div class="d-flex top-title-section pb-4 justify-content-between">
                         <div class="d-flex top-title-left align-self-center">
                             <span class="icon mr-3"><img src="{{ asset('images/seo.png') }}" style="width: 32px; height: 32px;"></span>
                             <h3 class="mb-0">SEO Management</h3>
                             <span class="counter ml-3 seo_count">00</span>
-                        </div>
+                    </div>
                         <div class="d-flex top-title-right align-self-center">
                             <div class="select-box pl-3">
                                 <button type="button" class="btn btn-info rounded-full" onclick="generateSitemap()">
                                     <i class="mdi mdi-sitemap mr-2"></i>Generate Sitemap
-                                </button>
-                            </div>
+                            </button>
+                        </div>
                             <div class="select-box pl-3">
                                 <button type="button" class="btn btn-secondary rounded-full" onclick="previewSitemap()">
                                     <i class="mdi mdi-eye mr-2"></i>Preview Sitemap
-                                </button>
-                            </div>
+                            </button>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card border">
-                        <div class="card-body">
+                                <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="card card-box-with-icon bg--1">
@@ -90,13 +90,13 @@
                                             <span class="box-icon ab"><img src="{{ asset('images/time_icon.png') }}" style="width: 32px; height: 32px;"></span>
                                         </div>
                                     </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
@@ -113,7 +113,7 @@
             </div>
         @endif
 
-        <!-- SEO Pages Table -->
+                    <!-- SEO Pages Table -->
         <div class="table-list">
             <div class="row">
                 <div class="col-12">
@@ -146,100 +146,100 @@
                                                     </label>
                                                 </th>
                                             <?php } ?>
-                                            <th>Page Key</th>
-                                            <th>Title</th>
-                                            <th>Description</th>
-                                            <th>OG Image</th>
-                                            <th>Created</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
+                                    <th>Page Key</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>OG Image</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
                                     <tbody id="append_seo_pages"></tbody>
-                                </table>
+                        </table>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- SEO Settings Card -->
-        <div class="row mt-4">
-            <div class="col-12">
+    <!-- SEO Settings Card -->
+    <div class="row mt-4">
+        <div class="col-12">
                 <div class="card border">
                     <div class="card-header d-flex justify-content-between align-items-center border-0">
                         <div class="card-header-title">
                             <h3 class="text-dark-2 mb-2 h4">Global SEO Settings</h3>
                             <p class="mb-0 text-dark-2">Configure global SEO settings for your website</p>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('seo.settings.update') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('seo.settings.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
                                         <label for="site_name" class="control-label">Site Name</label>
-                                        <input type="text" class="form-control" id="site_name" name="site_name" 
-                                               value="{{ $settings['site_name'] ?? 'JippyMart' }}" required>
-                                    </div>
+                                    <input type="text" class="form-control" id="site_name" name="site_name" 
+                                           value="{{ $settings['site_name'] ?? 'JippyMart' }}" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                         <label for="twitter_handle" class="control-label">Twitter Handle</label>
-                                        <input type="text" class="form-control" id="twitter_handle" name="twitter_handle" 
-                                               value="{{ $settings['twitter_handle'] ?? '' }}" 
-                                               placeholder="@jippymart">
-                                    </div>
+                                    <input type="text" class="form-control" id="twitter_handle" name="twitter_handle" 
+                                           value="{{ $settings['twitter_handle'] ?? '' }}" 
+                                           placeholder="@jippymart">
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
+                        <div class="form-group">
                                 <label for="site_description" class="control-label">Site Description</label>
-                                <textarea class="form-control" id="site_description" name="site_description" rows="3" required>{{ $settings['site_description'] ?? '' }}</textarea>
-                            </div>
+                            <textarea class="form-control" id="site_description" name="site_description" rows="3" required>{{ $settings['site_description'] ?? '' }}</textarea>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
                                         <label for="google_analytics_id" class="control-label">Google Analytics ID</label>
-                                        <input type="text" class="form-control" id="google_analytics_id" name="google_analytics_id" 
-                                               value="{{ $settings['google_analytics_id'] ?? '' }}" 
-                                               placeholder="GA_MEASUREMENT_ID">
-                                    </div>
+                                    <input type="text" class="form-control" id="google_analytics_id" name="google_analytics_id" 
+                                           value="{{ $settings['google_analytics_id'] ?? '' }}" 
+                                           placeholder="GA_MEASUREMENT_ID">
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                         <label for="contact_email" class="control-label">Contact Email</label>
-                                        <input type="email" class="form-control" id="contact_email" name="contact_email" 
-                                               value="{{ $settings['contact_email'] ?? '' }}">
-                                    </div>
+                                    <input type="email" class="form-control" id="contact_email" name="contact_email" 
+                                           value="{{ $settings['contact_email'] ?? '' }}">
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
+                        <div class="form-group">
                                 <label for="default_og_image" class="control-label">Default OG Image</label>
-                                @if(isset($settings['default_og_image']) && $settings['default_og_image'])
-                                    <div class="mb-2">
-                                        <img src="{{ asset($settings['default_og_image']) }}" alt="Current OG Image" 
-                                             style="max-width: 200px; max-height: 100px;" class="img-thumbnail">
-                                        <br>
-                                        <small class="text-muted">Current image</small>
-                                    </div>
-                                @endif
-                                <input type="file" class="form-control-file" id="default_og_image" name="default_og_image" accept="image/*">
-                                <small class="form-text text-muted">Recommended: 1200x630 pixels</small>
-                            </div>
+                            @if(isset($settings['default_og_image']) && $settings['default_og_image'])
+                                <div class="mb-2">
+                                    <img src="{{ asset($settings['default_og_image']) }}" alt="Current OG Image" 
+                                         style="max-width: 200px; max-height: 100px;" class="img-thumbnail">
+                                    <br>
+                                    <small class="text-muted">Current image</small>
+                                </div>
+                            @endif
+                            <input type="file" class="form-control-file" id="default_og_image" name="default_og_image" accept="image/*">
+                            <small class="form-text text-muted">Recommended: 1200x630 pixels</small>
+                        </div>
 
                             <button type="submit" class="btn btn-primary rounded-full">
                                 <i class="mdi mdi-content-save mr-2"></i>Update Settings
-                            </button>
-                        </form>
-                    </div>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @endsection
@@ -253,15 +253,15 @@
         checkDeletePermission = true;
     }
 
-    function generateSitemap() {
-        if (confirm('Generate sitemap now? This may take a few moments.')) {
-            window.location.href = '{{ route("seo.generate-sitemap") }}';
-        }
+function generateSitemap() {
+    if (confirm('Generate sitemap now? This may take a few moments.')) {
+        window.location.href = '{{ route("seo.generate-sitemap") }}';
     }
+}
 
-    function previewSitemap() {
-        window.open('{{ route("seo.preview-sitemap") }}', '_blank');
-    }
+function previewSitemap() {
+    window.open('{{ route("seo.preview-sitemap") }}', '_blank');
+}
 
     $(document).ready(function () {
         // Load sitemap stats and update counters
@@ -465,20 +465,20 @@
     });
 
     function loadSitemapStats() {
-        fetch('{{ route("seo.sitemap-stats") }}')
-            .then(response => response.json())
-            .then(data => {
-                if (data.exists) {
+    fetch('{{ route("seo.sitemap-stats") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
                     $('.sitemap_urls').text(data.url_count);
                     $('.sitemap_size').text(data.file_size_formatted);
                     $('.last_modified').text(data.last_modified);
-                } else {
+            } else {
                     $('.sitemap_urls').text('0');
                     $('.sitemap_size').text('N/A');
                     $('.last_modified').text('Never');
-                }
-            })
-            .catch(error => {
+            }
+        })
+        .catch(error => {
                 console.error('Error loading sitemap stats:', error);
                 $('.sitemap_urls').text('Error');
                 $('.sitemap_size').text('Error');
